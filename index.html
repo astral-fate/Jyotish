@@ -1,0 +1,418 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interactive Jyotish Study Guide</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #1a202c;
+            color: #e2e8f0;
+        }
+        .tab-button {
+            transition: all 0.3s ease;
+        }
+        .tab-button.active {
+            background-color: #4a5568;
+            color: #ffffff;
+            border-bottom: 2px solid #63b3ed;
+        }
+        .chart-container {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            grid-template-rows: repeat(4, 1fr);
+            width: 400px;
+            height: 400px;
+            transform: rotate(45deg);
+            margin: 60px auto;
+        }
+        .chart-house {
+            border: 1px solid #4a5568;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        .chart-house span {
+            transform: rotate(-45deg);
+            font-size: 1.25rem;
+            font-weight: bold;
+        }
+        .chart-house:hover {
+            background-color: #2d3748;
+        }
+        .center-house {
+            grid-column: 2 / 4;
+            grid-row: 2 / 4;
+        }
+        .house-1 { grid-column: 2 / 4; grid-row: 1 / 2; }
+        .house-2 { grid-column: 1 / 2; grid-row: 1 / 2; }
+        .house-3 { grid-column: 1 / 2; grid-row: 2 / 3; }
+        .house-4 { grid-column: 1 / 3; grid-row: 3 / 4; }
+        .house-5 { grid-column: 1 / 2; grid-row: 4 / 5; }
+        .house-6 { grid-column: 2 / 3; grid-row: 4 / 5; }
+        .house-7 { grid-column: 2 / 4; grid-row: 4 / 5; }
+        .house-8 { grid-column: 4 / 5; grid-row: 4 / 5; }
+        .house-9 { grid-column: 4 / 5; grid-row: 3 / 4; }
+        .house-10 { grid-column: 3 / 5; grid-row: 2 / 3; }
+        .house-11 { grid-column: 4 / 5; grid-row: 1 / 2; }
+        .house-12 { grid-column: 3 / 4; grid-row: 1 / 2; }
+        
+        /* Flashcard styles */
+        .flashcard-container {
+            perspective: 1000px;
+        }
+        .flashcard {
+            width: 100%;
+            height: 250px;
+            position: relative;
+            transform-style: preserve-3d;
+            transition: transform 0.6s;
+        }
+        .flashcard.is-flipped {
+            transform: rotateY(180deg);
+        }
+        .flashcard-face {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            backface-visibility: hidden;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            border-radius: 1rem;
+            background-color: #2d3748;
+            padding: 1rem;
+        }
+        .flashcard-back {
+            transform: rotateY(180deg);
+            overflow-y: auto;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container mx-auto p-4 md:p-8">
+        <h1 class="text-3xl md:text-4xl font-bold text-center mb-2 text-white">Interactive Jyotish Study Guide</h1>
+        <p class="text-center text-gray-400 mb-8">Based on the guide by Claire Nakti</p>
+
+        <!-- Tabs -->
+        <div class="mb-8 border-b border-gray-700">
+            <nav class="flex flex-wrap -mb-px" id="tabs">
+                <button class="tab-button active text-lg py-4 px-6 font-medium" data-tab="houses">Houses (Bhavas)</button>
+                <button class="tab-button text-lg py-4 px-6 font-medium" data-tab="signs">Signs (Rashis)</button>
+                <button class="tab-button text-lg py-4 px-6 font-medium" data-tab="nakshatras">Nakshatras</button>
+                <button class="tab-button text-lg py-4 px-6 font-medium" data-tab="planets">Planets</button>
+                <button class="tab-button text-lg py-4 px-6 font-medium" data-tab="yoni">Yoni Compatibility</button>
+            </nav>
+        </div>
+
+        <!-- Content Panes -->
+        <div id="tab-content">
+            <!-- Houses (Bhavas) -->
+            <div id="houses-content" class="tab-pane">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
+                    <div>
+                        <h2 class="text-2xl font-bold mb-4 text-center">North Indian Chart</h2>
+                        <p class="text-center text-gray-400 mb-4">Click on a house to see its details.</p>
+                        <div class="chart-container">
+                            <div class="chart-house house-1" data-house="1"><span>1</span></div>
+                            <div class="chart-house house-2" data-house="2"><span>2</span></div>
+                            <div class="chart-house house-3" data-house="3"><span>3</span></div>
+                            <div class="chart-house house-4" data-house="4"><span>4</span></div>
+                            <div class="chart-house house-5" data-house="5"><span>5</span></div>
+                            <div class="chart-house house-6" data-house="6"><span>6</span></div>
+                            <div class="chart-house house-7" data-house="7"><span>7</span></div>
+                            <div class="chart-house house-8" data-house="8"><span>8</span></div>
+                            <div class="chart-house house-9" data-house="9"><span>9</span></div>
+                            <div class="chart-house house-10" data-house="10"><span>10</span></div>
+                            <div class="chart-house house-11" data-house="11"><span>11</span></div>
+                            <div class="chart-house house-12" data-house="12"><span>12</span></div>
+                            <div class="chart-house center-house bg-gray-800"></div>
+                        </div>
+                    </div>
+                    <div id="house-details" class="bg-gray-800 p-6 rounded-lg min-h-[400px]">
+                        <h3 class="text-2xl font-bold mb-4">House Details</h3>
+                        <p>Select a house from the chart to view its associations and classifications.</p>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Signs (Rashis) -->
+            <div id="signs-content" class="tab-pane hidden">
+                <h2 class="text-2xl font-bold mb-4 text-center">Nakshatras by Sign (Rashi)</h2>
+                <div class="max-w-2xl mx-auto bg-gray-800 p-6 rounded-lg">
+                   <div class="mb-4">
+                       <label for="sign-select" class="block text-sm font-medium text-gray-300 mb-2">Select a Sign:</label>
+                       <select id="sign-select" class="w-full bg-gray-700 border border-gray-600 rounded-md p-2 text-white">
+                           <!-- Options will be populated by JS -->
+                       </select>
+                   </div>
+                    <div id="sign-nakshatra-list" class="mt-6 space-y-4">
+                        <!-- Nakshatra details will be populated here -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- Nakshatras -->
+            <div id="nakshatras-content" class="tab-pane hidden">
+                <h2 class="text-2xl font-bold mb-4 text-center">Nakshatra Flashcards</h2>
+                <div class="max-w-2xl mx-auto">
+                    <div class="flashcard-container mb-4">
+                        <div id="nakshatra-flashcard" class="flashcard">
+                            <div class="flashcard-face flashcard-front">
+                                <h3 id="nakshatra-name" class="text-3xl font-bold"></h3>
+                            </div>
+                            <div class="flashcard-face flashcard-back">
+                                <div id="nakshatra-details" class="text-left w-full"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="flex justify-between items-center mt-6">
+                        <button id="prev-nakshatra" class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded-lg">Previous</button>
+                        <button id="flip-nakshatra" class="bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded-lg">Flip Card</button>
+                        <button id="next-nakshatra" class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded-lg">Next</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Planets -->
+            <div id="planets-content" class="tab-pane hidden">
+                 <h2 class="text-2xl font-bold mb-4 text-center">Planetary Dignity</h2>
+                 <div class="max-w-md mx-auto bg-gray-800 p-6 rounded-lg">
+                    <div class="mb-4">
+                        <label for="planet-select" class="block text-sm font-medium text-gray-300 mb-2">Select a Planet:</label>
+                        <select id="planet-select" class="w-full bg-gray-700 border border-gray-600 rounded-md p-2 text-white">
+                            <!-- Options will be populated by JS -->
+                        </select>
+                    </div>
+                     <div id="planet-result" class="mt-6 p-4 bg-gray-700 rounded-md min-h-[150px]">
+                         <p>Select a planet to see its dignity points.</p>
+                     </div>
+                 </div>
+            </div>
+
+            <!-- Yoni Compatibility -->
+            <div id="yoni-content" class="tab-pane hidden">
+                <h2 class="text-2xl font-bold mb-4 text-center">Yoni Compatibility Checker</h2>
+                <div class="max-w-lg mx-auto bg-gray-800 p-6 rounded-lg">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                        <div>
+                            <label for="yoni1-select" class="block text-sm font-medium text-gray-300 mb-2">Partner 1 Yoni:</label>
+                            <select id="yoni1-select" class="w-full bg-gray-700 border border-gray-600 rounded-md p-2 text-white"></select>
+                        </div>
+                        <div>
+                            <label for="yoni2-select" class="block text-sm font-medium text-gray-300 mb-2">Partner 2 Yoni:</label>
+                            <select id="yoni2-select" class="w-full bg-gray-700 border border-gray-600 rounded-md p-2 text-white"></select>
+                        </div>
+                    </div>
+                    <div class="text-center">
+                        <button id="check-yoni" class="bg-purple-600 hover:bg-purple-700 text-white font-bold py-2 px-6 rounded-lg">Check Compatibility</button>
+                    </div>
+                    <div id="yoni-result" class="mt-6 p-4 bg-gray-700 rounded-md text-center">
+                        <p>Select two Yonis and check their compatibility.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // --- DATA FROM THE GUIDE ---
+
+        const housesData = {
+            1: { associations: ["Body & Appearance", "Health & Livelihood", "Honor & Social Class"], classifications: ["Dharma", "Kendra/Kona"] },
+            2: { associations: ["Voice & Speech", "Face & Throat", "Wealth & Assets", "Food & Death"], classifications: ["Artha", "Maraka"] },
+            3: { associations: ["Communication", "Writing", "Hands & Skill", "Young Siblings"], classifications: ["Kama", "Dussthana", "Upachaya"] },
+            4: { associations: ["Home & Property", "Mother & Emotions", "Childhood Education"], classifications: ["Moksha", "Kendra"] },
+            5: { associations: ["Children & Students", "Good Karmas", "Intelligence & Discernment", "Talismans"], classifications: ["Dharma", "Kona"] },
+            6: { associations: ["Enemies & Combat", "Accidents & Injuries", "Poisons & Vices", "Diseases & Loss"], classifications: ["Artha", "Dussthana", "Upachaya"] },
+            7: { associations: ["Marriage & Dating", "Partners & Business", "Travels & Desires", "Adultery & Death"], classifications: ["Kama", "Kendra", "Maraka"] },
+            8: { associations: ["Inheritance", "Occult & Mystery", "Death & Defeat", "Anger & Divorce"], classifications: ["Moksha", "Dussthana"] },
+            9: { associations: ["Religion & Devotion", "Wisdom & Guru", "Higher Academics", "Father & Travel"], classifications: ["Dharma", "Kona"] },
+            10: { associations: ["Business & Trade", "Fame & Authority", "Government", "Reputation"], classifications: ["Artha", "Kendra", "Upachaya"] },
+            11: { associations: ["Gifts & Money", "Gain & Desires", "Dating & Casual Sex"], classifications: ["Kama", "Upachaya"] },
+            12: { associations: ["Sleep, Dreams", "Sex & Use of Energy", "Loss & Imprisonment"], classifications: ["Moksha", "Dussthana"] }
+        };
+
+        const nakshatrasData = [
+            { name: "Ashwini", ruler: "Ketu", rashis: ["Aries"], deity: "The Ashwini Kumars", symbol: "Horse head", nature: "Light", yoni: "Horse", gender: "Male" },
+            { name: "Bharani", ruler: "Venus", rashis: ["Aries"], deity: "Yama", symbol: "A Vagina/Yoni", nature: "Cruel", yoni: "Elephant", gender: "Female" },
+            { name: "Krittika", ruler: "Sun", rashis: ["Aries", "Taurus"], deity: "Agni", symbol: "A Sharp Instrument", nature: "Mixed", yoni: "Sheep", gender: "Female" },
+            { name: "Rohini", ruler: "Moon", rashis: ["Taurus"], deity: "Brahma", symbol: "A Cart", nature: "Fixed", yoni: "Serpent", gender: "Female" },
+            { name: "Mrigashira", ruler: "Mars", rashis: ["Taurus", "Gemini"], deity: "Chandra", symbol: "A Deer", nature: "Sweet", yoni: "Serpent", gender: "Neuter" },
+            { name: "Ardra", ruler: "Rahu", rashis: ["Gemini"], deity: "Rudra", symbol: "Teardrop or Diamond", nature: "Dreadful", yoni: "Dog", gender: "Female" },
+            { name: "Purnavasu", ruler: "Jupiter", rashis: ["Gemini", "Cancer"], deity: "Aditi", symbol: "A Quiver of Arrows", nature: "Movable", yoni: "Cat", gender: "Male" },
+            { name: "Pushya", ruler: "Saturn", rashis: ["Cancer"], deity: "Brihaspati", symbol: "Udder", nature: "Light", yoni: "Sheep", gender: "Male" },
+            { name: "Ashlesha", ruler: "Mercury", rashis: ["Cancer"], deity: "Sarpa", symbol: "A Coiled Serpent", nature: "Dreadful", yoni: "Cat", gender: "Female" },
+            { name: "Magha", ruler: "Ketu", rashis: ["Leo"], deity: "The Pitras", symbol: "A Royal Throne", nature: "Cruel", yoni: "Rat", gender: "Female" },
+            { name: "Purva Phalguni", ruler: "Venus", rashis: ["Leo"], deity: "Bhaga", symbol: "Hammock or Bed", nature: "Cruel", yoni: "Rat", gender: "Female" },
+            { name: "Uttara Phalguni", ruler: "Sun", rashis: ["Leo", "Virgo"], deity: "Aryaman", symbol: "Hammock or Bed", nature: "Fixed", yoni: "Cow", gender: "Female" },
+            { name: "Hasta", ruler: "Moon", rashis: ["Virgo"], deity: "Surya", symbol: "A Hand", nature: "Light", yoni: "Buffalo", gender: "Male" },
+            { name: "Chitra", ruler: "Mars", rashis: ["Virgo", "Libra"], deity: "Tvastar", symbol: "A Jewel", nature: "Sweet", yoni: "Tiger", gender: "Female" },
+            { name: "Swati", ruler: "Rahu", rashis: ["Libra"], deity: "Vayu", symbol: "A Sword or Coral", nature: "Movable", yoni: "Buffalo", gender: "Female" },
+            { name: "Vishaka", ruler: "Jupiter", rashis: ["Libra", "Scorpio"], deity: "Shakragni", symbol: "A Decorated Gateway", nature: "Mixed", yoni: "Tiger", gender: "Female" },
+            { name: "Anuradha", ruler: "Saturn", rashis: ["Scorpio"], deity: "Mitra", symbol: "A Staff", nature: "Sweet", yoni: "Deer", gender: "Male" },
+            { name: "Jyestha", ruler: "Mercury", rashis: ["Scorpio"], deity: "Indra", symbol: "A Talisman", nature: "Dreadful", yoni: "Deer", gender: "Female" },
+            { name: "Mula", ruler: "Ketu", rashis: ["Sagittarius"], deity: "Nritti", symbol: "Roots", nature: "Dreadful", yoni: "Dog", gender: "Neuter" },
+            { name: "Purva Ashada", ruler: "Venus", rashis: ["Sagittarius"], deity: "The Apahs", symbol: "A Decorative Fan", nature: "Cruel", yoni: "Monkey", gender: "Female" },
+            { name: "Uttara Ashada", ruler: "Sun", rashis: ["Sagittarius", "Capricorn"], deity: "The 10 Visvadevas", symbol: "A Tusk", nature: "Fixed", yoni: "Mongoose", gender: "Female" },
+            { name: "Shravana", ruler: "Moon", rashis: ["Capricorn"], deity: "Vishnu/Saraswati", symbol: "Ear", nature: "Movable", yoni: "Monkey", gender: "Male" },
+            { name: "Dhanishta", ruler: "Mars", rashis: ["Capricorn", "Aquarius"], deity: "The Vasus", symbol: "Drum (Musical)", nature: "Movable", yoni: "Lion", gender: "Female" },
+            { name: "Shatabhisha", ruler: "Rahu", rashis: ["Aquarius"], deity: "Varuna", symbol: "An Empty Circle", nature: "Movable", yoni: "Horse", gender: "Neuter" },
+            { name: "Purvabhadrapada", ruler: "Jupiter", rashis: ["Aquarius", "Pisces"], deity: "Ajaikapada", symbol: "Two Faced Man", nature: "Cruel", yoni: "Lion", gender: "Male" },
+            { name: "Uttarabhadrapada", ruler: "Saturn", rashis: ["Pisces"], deity: "Ahirbudhnya", symbol: "Back Legs of a Funeral Bed", nature: "Fixed", yoni: "Cow", gender: "Male" },
+            { name: "Revati", ruler: "Mercury", rashis: ["Pisces"], deity: "Pushan", symbol: "Drum (Timekeeping)", nature: "Sweet", yoni: "Elephant", gender: "Female" },
+        ];
+        
+        const signs = ["Aries", "Taurus", "Gemini", "Cancer", "Leo", "Virgo", "Libra", "Scorpio", "Sagittarius", "Capricorn", "Aquarius", "Pisces"];
+
+        const planetsData = {
+            Sun: { exaltation: "10° Aries", debilitation: "10° Libra", mulatrikona: "1°-10° Leo", own: "Leo" },
+            Moon: { exaltation: "3° Taurus", debilitation: "3° Scorpio", mulatrikona: "4°-30° Taurus", own: "Cancer" },
+            Mars: { exaltation: "28° Capricorn", debilitation: "28° Cancer", mulatrikona: "0°-18° Aries", own: "Aries, Scorpio" },
+            Mercury: { exaltation: "15° Virgo", debilitation: "15° Pisces", mulatrikona: "16°-20° Virgo", own: "Gemini, Virgo" },
+            Jupiter: { exaltation: "5° Cancer", debilitation: "5° Capricorn", mulatrikona: "0°-13° Sagittarius", own: "Sagittarius, Pisces" },
+            Venus: { exaltation: "27° Pisces", debilitation: "27° Virgo", mulatrikona: "0°-10° Libra", own: "Taurus, Libra" },
+            Saturn: { exaltation: "20° Libra", debilitation: "20° Aries", mulatrikona: "0°-20° Aquarius", own: "Capricorn, Aquarius" },
+            Rahu: { exaltation: "Taurus", debilitation: "Scorpio", mulatrikona: "N/A", own: "N/A" },
+            Ketu: { exaltation: "Scorpio", debilitation: "Taurus", mulatrikona: "N/A", own: "N/A" }
+        };
+
+        const yoniAnimals = ["Horse", "Elephant", "Sheep", "Serpent", "Dog", "Cat", "Rat", "Cow", "Buffalo", "Tiger", "Hare", "Monkey", "Mongoose", "Lion"];
+        const yoniCompatibility = [
+            [4, 2, 2, 3, 2, 2, 2, 1, 0, 1, 3, 3, 2, 1], [2, 4, 3, 3, 2, 2, 2, 2, 3, 1, 2, 3, 2, 0], [2, 3, 4, 2, 1, 2, 1, 3, 3, 1, 2, 0, 3, 1], [3, 3, 2, 4, 2, 1, 1, 1, 1, 2, 2, 2, 0, 2], [2, 2, 1, 2, 4, 2, 1, 2, 2, 1, 0, 2, 1, 1], [2, 2, 2, 1, 2, 4, 0, 2, 2, 1, 3, 3, 2, 1], [2, 2, 1, 1, 1, 0, 4, 2, 2, 2, 2, 2, 1, 2], [1, 2, 3, 1, 2, 2, 2, 4, 3, 0, 3, 2, 2, 1], [0, 3, 3, 1, 2, 2, 2, 3, 4, 1, 2, 2, 2, 1], [1, 1, 1, 2, 1, 1, 2, 0, 1, 4, 1, 1, 2, 1], [3, 2, 2, 2, 0, 3, 2, 3, 2, 1, 4, 2, 2, 1], [3, 3, 0, 2, 2, 3, 2, 2, 2, 1, 2, 4, 3, 2], [2, 2, 3, 3, 1, 2, 1, 2, 2, 2, 2, 3, 4, 2], [1, 0, 1, 2, 1, 1, 2, 1, 1, 1, 1, 2, 2, 4]
+        ];
+        const yoniScoreMeaning = { 4: "Best Compatibility", 3: "High Compatibility", 2: "Average Compatibility", 1: "Low Compatibility", 0: "Incompatible" };
+
+        // --- APP LOGIC ---
+
+        document.addEventListener('DOMContentLoaded', function() {
+            // Tab functionality
+            const tabs = document.querySelectorAll('.tab-button');
+            const tabPanes = document.querySelectorAll('.tab-pane');
+
+            tabs.forEach(tab => {
+                tab.addEventListener('click', () => {
+                    tabs.forEach(t => t.classList.remove('active'));
+                    tab.classList.add('active');
+
+                    tabPanes.forEach(pane => {
+                        pane.classList.add('hidden');
+                    });
+                    document.getElementById(tab.dataset.tab + '-content').classList.remove('hidden');
+                });
+            });
+
+            // Houses functionality
+            const houseElements = document.querySelectorAll('.chart-house');
+            const houseDetailsDiv = document.getElementById('house-details');
+            houseElements.forEach(house => {
+                house.addEventListener('click', () => {
+                    const houseNumber = house.dataset.house;
+                    if (!houseNumber) return;
+                    const data = housesData[houseNumber];
+                    houseDetailsDiv.innerHTML = `<h3 class="text-2xl font-bold mb-4 text-white">House ${houseNumber}</h3><div><h4 class="text-lg font-semibold text-blue-300">Associations:</h4><ul class="list-disc list-inside text-gray-300">${data.associations.map(item => `<li>${item}</li>`).join('')}</ul></div><div class="mt-4"><h4 class="text-lg font-semibold text-green-300">Classifications:</h4><ul class="list-disc list-inside text-gray-300">${data.classifications.map(item => `<li>${item}</li>`).join('')}</ul></div>`;
+                });
+            });
+
+            // Signs (Rashis) functionality
+            const signSelect = document.getElementById('sign-select');
+            const signNakshatraList = document.getElementById('sign-nakshatra-list');
+            
+            signs.forEach(sign => {
+                const option = document.createElement('option');
+                option.value = sign;
+                option.textContent = sign;
+                signSelect.appendChild(option);
+            });
+
+            function displayNakshatrasForSign(sign) {
+                const filteredNakshatras = nakshatrasData.filter(n => n.rashis.includes(sign));
+                signNakshatraList.innerHTML = filteredNakshatras.map(nakshatra => `
+                    <div class="bg-gray-700 p-4 rounded-lg">
+                        <h4 class="text-xl font-bold text-white">${nakshatra.name}</h4>
+                        <p><strong>Ruler:</strong> ${nakshatra.ruler}</p>
+                        <p><strong>Deity:</strong> ${nakshatra.deity}</p>
+                        <p><strong>Symbol:</strong> ${nakshatra.symbol}</p>
+                        <p><strong>Nature:</strong> ${nakshatra.nature}</p>
+                        <p><strong>Yoni:</strong> ${nakshatra.yoni}</p>
+                        <p><strong>Gender:</strong> ${nakshatra.gender}</p>
+                    </div>
+                `).join('');
+            }
+
+            signSelect.addEventListener('change', (e) => displayNakshatrasForSign(e.target.value));
+            displayNakshatrasForSign(signs[0]); // Initial load
+
+            // Nakshatras functionality
+            let currentNakshatraIndex = 0;
+            const nakshatraCard = document.getElementById('nakshatra-flashcard');
+            const nakshatraName = document.getElementById('nakshatra-name');
+            const nakshatraDetails = document.getElementById('nakshatra-details');
+
+            function showNakshatra(index) {
+                const nakshatra = nakshatrasData[index];
+                nakshatraName.textContent = nakshatra.name;
+                nakshatraDetails.innerHTML = `<p><strong>Ruler:</strong> ${nakshatra.ruler}</p><p><strong>Rashi(s):</strong> ${nakshatra.rashis.join(', ')}</p><p><strong>Deity:</strong> ${nakshatra.deity}</p><p><strong>Symbol:</strong> ${nakshatra.symbol}</p><p><strong>Nature:</strong> ${nakshatra.nature}</p><p><strong>Yoni:</strong> ${nakshatra.yoni}</p><p><strong>Gender:</strong> ${nakshatra.gender}</p>`;
+                nakshatraCard.classList.remove('is-flipped');
+            }
+
+            document.getElementById('flip-nakshatra').addEventListener('click', () => nakshatraCard.classList.toggle('is-flipped'));
+            document.getElementById('next-nakshatra').addEventListener('click', () => {
+                currentNakshatraIndex = (currentNakshatraIndex + 1) % nakshatrasData.length;
+                showNakshatra(currentNakshatraIndex);
+            });
+            document.getElementById('prev-nakshatra').addEventListener('click', () => {
+                currentNakshatraIndex = (currentNakshatraIndex - 1 + nakshatrasData.length) % nakshatrasData.length;
+                showNakshatra(currentNakshatraIndex);
+            });
+            showNakshatra(0);
+
+            // Planets functionality
+            const planetSelect = document.getElementById('planet-select');
+            const planetResult = document.getElementById('planet-result');
+            Object.keys(planetsData).forEach(planet => {
+                const option = document.createElement('option');
+                option.value = planet;
+                option.textContent = planet;
+                planetSelect.appendChild(option);
+            });
+            planetSelect.addEventListener('change', () => {
+                const selectedPlanet = planetSelect.value;
+                const data = planetsData[selectedPlanet];
+                planetResult.innerHTML = `<h4 class="text-xl font-bold mb-2 text-white">${selectedPlanet}</h4><p><strong class="text-green-400">Exaltation:</strong> ${data.exaltation}</p><p><strong class="text-red-400">Debilitation:</strong> ${data.debilitation}</p><p><strong class="text-yellow-400">Mulatrikona:</strong> ${data.mulatrikona}</p><p><strong class="text-blue-400">Own Sign(s):</strong> ${data.own}</p>`;
+            });
+            planetSelect.dispatchEvent(new Event('change'));
+
+            // Yoni functionality
+            const yoni1Select = document.getElementById('yoni1-select');
+            const yoni2Select = document.getElementById('yoni2-select');
+            const yoniResult = document.getElementById('yoni-result');
+            yoniAnimals.forEach(animal => {
+                const option1 = document.createElement('option');
+                option1.value = animal;
+                option1.textContent = animal;
+                yoni1Select.appendChild(option1);
+                const option2 = document.createElement('option');
+                option2.value = animal;
+                option2.textContent = animal;
+                yoni2Select.appendChild(option2);
+            });
+            yoni2Select.selectedIndex = 1;
+            document.getElementById('check-yoni').addEventListener('click', () => {
+                const index1 = yoniAnimals.indexOf(yoni1Select.value);
+                const index2 = yoniAnimals.indexOf(yoni2Select.value);
+                const score = yoniCompatibility[index1][index2];
+                const meaning = yoniScoreMeaning[score];
+                yoniResult.innerHTML = `<p class="text-2xl font-bold">${score} / 4</p><p class="text-lg text-yellow-300">${meaning}</p>`;
+            });
+        });
+    </script>
+</body>
+</html>
